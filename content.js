@@ -32,9 +32,23 @@ function onWindowLoad() {
         var name;
         // alert(els)
         if (els.length === 0) {
-            name = "single_page"
+            var lastKnown = localStorage.getItem("lastKnownPage");
+            if (lastKnown !== "start") {
+                var num = parseInt(lastKnown);
+                num++
+                name = "" + num;
+                localStorage.setItem("lastKnownPage", name)
+            } else {
+                name = lastKnown;
+            }
         } else {
-            name = els.length === 1 ? els[0].title : els[0].title + "-" + els[els.length-1].title;
+            if (els.length === 1) {
+                name = els[0].title;
+                localStorage.setItem("lastKnownPage", name)
+            } else {
+                name = els[0].title + "-" + els[els.length-1].title;
+                localStorage.setItem("lastKnownPage", els[els.length-1].title)
+            }
         }
 
         download(document.body.innerHTML, `${name}.html`, "text/html");
