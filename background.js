@@ -29,7 +29,7 @@ chrome.webRequest.onBeforeRequest.addListener(
             // alert(currId + " " + id)
             if (currId === id && !mSet.has(currId)) {
                 mSet.add(currId);
-                chrome.tabs.create({ url: details.url, active: false});
+                chrome.tabs.create({ url: details.url, active: true});
                 // alert(details.url)
                 // chrome.downloads.download({
                 //     url: details.url,
@@ -41,28 +41,4 @@ chrome.webRequest.onBeforeRequest.addListener(
         
     },
     {urls: [`*://platform.virdocs.com/private/manifest_item_content/*`]}
-)
-
-chrome.tabs.onCreated.addListener(
-    function(tab) {
-        // chrome.tabs.query({}, tabs => {
-        //     let url = tabs[tabs.length-1].url;
-        //     alert(url)
-        // });
-        // alert(tab.url)
-        if (tab.url.includes("://platform.virdocs.com/private/manifest_item_content/")) {
-            // alert("new tab")
-            chrome.pageCapture.saveAsMHTML(
-                {tabId: tab.id},
-                function(mhtmlData) {
-                    var blob = new Blob([mhtmlData], {type: "text/html"})
-                    var url = URL.createObjectURL(blob);
-                    chrome.downloads.download({
-                        url: url // The object URL can be used as download URL
-                        //...
-                    });
-                }
-            )
-        }
-    }
 )
